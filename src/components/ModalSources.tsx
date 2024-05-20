@@ -261,11 +261,7 @@ type ModalSourcesProps = {
 };
 
 export default class ModalSources extends React.Component<ModalSourcesProps> {
-  stripTitle(source: SourceSpecification & {title?: string}): SourceSpecification {
-    const strippedSource = {...source}
-    delete strippedSource['title']
-    return strippedSource
-  }
+  
 
   render() {
     const mapStyle = this.props.mapStyle
@@ -280,16 +276,7 @@ export default class ModalSources extends React.Component<ModalSourcesProps> {
       />
     })
 
-    const tilesetOptions = Object.keys(publicSources).filter((sourceId: string) => !(sourceId in mapStyle.sources)).map((sourceId: string) => {
-      const source = publicSources[sourceId as keyof typeof publicSources] as SourceSpecification & {title: string};
-      return <PublicSource
-        key={sourceId}
-        id={sourceId}
-        type={source.type}
-        title={source.title}
-        onSelect={() => this.props.onStyleChanged(addSource(mapStyle, sourceId, this.stripTitle(source)))}
-      />
-    })
+   
 
     return <Modal
       data-wd-key="modal:sources"
@@ -302,15 +289,8 @@ export default class ModalSources extends React.Component<ModalSourcesProps> {
         {activeSources}
       </section>
 
-      <section className="maputnik-modal-section">
-        <h1>Choose Public Source</h1>
-        <p>
-          Add one of the publicly available sources to your style.
-        </p>
-        <div className="maputnik-public-sources" style={{maxWidth: 500}}>
-          {tilesetOptions}
-        </div>
-      </section>
+      {/* [CHUNO] : hide PublicSourcesSection */}
+      {false && <PublicSourcesSection mapStyle={mapStyle} onStyleChanged={this.props.onStyleChanged}/>}
 
       <section className="maputnik-modal-section">
         <h1>Add New Source</h1>
@@ -323,3 +303,34 @@ export default class ModalSources extends React.Component<ModalSourcesProps> {
   }
 }
 
+function stripTitle(source: SourceSpecification & {title?: string}): SourceSpecification {
+  const strippedSource = {...source}
+  delete strippedSource['title']
+  return strippedSource
+}
+
+type PublicSourcesSectionProps = {
+  mapStyle: StyleSpecification
+  onStyleChanged(...args: unknown[]): unknown
+}
+function PublicSourcesSection({mapStyle,...props}: PublicSourcesSectionProps){
+  const tilesetOptions = Object.keys(publicSources).filter((sourceId: string) => !(sourceId in mapStyle.sources)).map((sourceId: string) => {
+    const source = publicSources[sourceId as keyof typeof publicSources] as SourceSpecification & {title: string};
+    return <PublicSource
+      key={sourceId}
+      id={sourceId}
+      type={source.type}
+      title={source.title}
+      onSelect={() => props.onStyleChanged(addSource(mapStyle, sourceId, stripTitle(source)))}
+    />
+  })
+  return <section className="maputnik-modal-section">
+  <h1>Choose Public Source</h1>
+  <p>
+    Add one of the publicly available sources to your style.
+  </p>
+  <div className="maputnik-public-sources" style={{maxWidth: 500}}>
+    {tilesetOptions}
+  </div>
+</section>
+}

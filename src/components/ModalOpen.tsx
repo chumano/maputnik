@@ -174,15 +174,7 @@ export default class ModalOpen extends React.Component<ModalOpenProps, ModalOpen
   }
 
   render() {
-    const styleOptions = publicStyles.map(style => {
-      return <PublicStyle
-        key={style.id}
-        url={style.url}
-        title={style.title}
-        thumbnailUrl={style.thumbnail}
-        onSelect={this.onStyleSelect}
-      />
-    })
+    
 
     let errorElement;
     if(this.state.error) {
@@ -238,15 +230,8 @@ export default class ModalOpen extends React.Component<ModalOpenProps, ModalOpen
             </form>
           </section>
 
-          <section className="maputnik-modal-section maputnik-modal-section--shrink">
-            <h1>Gallery Styles</h1>
-            <p>
-              Open one of the publicly available styles to start from.
-            </p>
-            <div className="maputnik-style-gallery-container">
-              {styleOptions}
-            </div>
-          </section>
+          {/* [CHUNO]: hide GalleryStyles */}
+         {false && <GalleryStyles onStyleSelect={this.onStyleSelect} />}
         </Modal>
 
         <ModalLoading
@@ -260,3 +245,26 @@ export default class ModalOpen extends React.Component<ModalOpenProps, ModalOpen
   }
 }
 
+type GalleryStylesProps = {
+  onStyleSelect: (styleUrl:string)=>void
+} 
+function GalleryStyles({onStyleSelect}:GalleryStylesProps){
+  const styleOptions = publicStyles.map(style => {
+    return <PublicStyle
+      key={style.id}
+      url={style.url}
+      title={style.title}
+      thumbnailUrl={style.thumbnail}
+      onSelect={onStyleSelect}
+    />
+  })
+  return  <section className="maputnik-modal-section maputnik-modal-section--shrink">
+  <h1>Gallery Styles</h1>
+  <p>
+    Open one of the publicly available styles to start from.
+  </p>
+  <div className="maputnik-style-gallery-container">
+    {styleOptions}
+  </div>
+</section>
+}

@@ -56,11 +56,13 @@ export class StyleStore {
    * List of style ids
    */
   mapStyles: string[];
+  storage: Storage
 
   // Tile store will load all items from local storage and
   // assume they do not change will working on it
   constructor() {
     this.mapStyles = loadStoredStyles();
+    this.storage = window.localStorage
   }
 
   init(cb: (...args: any[]) => void) {
@@ -70,9 +72,9 @@ export class StyleStore {
   // Delete entire style history
   purge() {
     for (let i = 0; i < window.localStorage.length; i++) {
-      const key = window.localStorage.key(i) as string;
+      const key = this.storage.key(i) as string;
       if(key.startsWith(storagePrefix)) {
-        window.localStorage.removeItem(key)
+        this.storage.removeItem(key)
       }
     }
   }
@@ -80,8 +82,8 @@ export class StyleStore {
   // Find the last edited style
   latestStyle(cb: (...args: any[]) => void) {
     if(this.mapStyles.length === 0) return loadDefaultStyle(cb)
-    const styleId = window.localStorage.getItem(storageKeys.latest) as string;
-    const styleItem = window.localStorage.getItem(styleKey(styleId))
+    const styleId = this.storage.getItem(storageKeys.latest) as string;
+    const styleItem = this.storage.getItem(styleKey(styleId))
 
     if(styleItem) return cb(JSON.parse(styleItem))
     loadDefaultStyle(cb)
@@ -91,8 +93,8 @@ export class StyleStore {
   save(mapStyle: StyleSpecification & { id: string }) {
     mapStyle = style.ensureStyleValidity(mapStyle)
     const key = styleKey(mapStyle.id)
-    window.localStorage.setItem(key, JSON.stringify(mapStyle))
-    window.localStorage.setItem(storageKeys.latest, mapStyle.id)
+    this.storage.setItem(key, JSON.stringify(mapStyle))
+    this.storage.setItem(storageKeys.latest, mapStyle.id)
     return mapStyle
   }
 }

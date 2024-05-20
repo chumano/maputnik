@@ -152,7 +152,8 @@ export default class MapMaplibreGl extends React.Component<MapMaplibreGlProps, M
     map.showCollisionBoxes = mapOpts.showCollisionBoxes!;
     map.showOverdrawInspector = mapOpts.showOverdrawInspector!;
 
-    this.initGeocoder(map);
+    // TODO: [CHUNO] hide geocoder
+    false && this.initGeocoder(map);
 
     const zoomControl = new ZoomControl;
     map.addControl(zoomControl, 'top-right');

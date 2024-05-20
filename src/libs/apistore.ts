@@ -25,6 +25,10 @@ export class ApiStyleStore {
     this.init = this.init.bind(this)
   }
 
+  //TODO: [CHUNO] apistore : manage style for map
+  // get map style  
+  // save style
+  //
   init(cb: (...args: any[]) => void) {
     fetch(this.localUrl + '/styles', {
       mode: 'cors',
@@ -35,7 +39,8 @@ export class ApiStyleStore {
       .then((body) => {
         const styleIds = body;
         this.latestStyleId = styleIds[0]
-        this.notifyLocalChanges()
+        // TODO: [CHUNO] dont use notifyLocalChanges websocker
+        false && this.notifyLocalChanges()
         cb(null)
       })
       .catch(() => {

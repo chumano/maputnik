@@ -262,7 +262,8 @@ export default class ModalSettings extends React.Component<ModalSettingsProps> {
           data-wd-key="modal:settings.maputnik:renderer"
           options={[
             ['mlgljs', 'MapLibreGL JS'],
-            ['ol', 'Open Layers (experimental)'],
+            // [CHUNO] hide style_renderer 'Open Layers'
+            //['ol', 'Open Layers (experimental)'],
           ]}
           value={metadata['maputnik:renderer'] || 'mlgljs'}
           onChange={onChangeMetadataProperty.bind(this, 'maputnik:renderer')}
