@@ -14,6 +14,10 @@ Report issues on [maputnik/editor](https://github.com/maputnik/editor).
 
 You can download a single binary for Linux, OSX or Windows from [the latest releases of **maputnik/editor**](https://github.com/maputnik/editor/releases/latest).
 
+### Run dev
+```bash
+go run . --watch -f mapstyle.json
+```
 ### Usage
 
 Simply start up a web server and access the Maputnik editor GUI at `localhost:8000`.
