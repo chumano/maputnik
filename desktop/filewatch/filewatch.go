@@ -1,9 +1,9 @@
 package filewatch
 
 import (
-	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/fsnotify/fsnotify"
 	"github.com/gorilla/websocket"
@@ -32,7 +32,7 @@ func writer(ws *websocket.Conn, filename string) {
 					var p []byte
 					var err error
 
-					p, err = ioutil.ReadFile(filename)
+					p, err = os.ReadFile(filename)
 					if err != nil {
 						log.Fatal(err)
 					}
